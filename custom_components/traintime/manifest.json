@@ -1,0 +1,10 @@
+{
+  "domain": "traitime",
+  "name": "SNCF TrainTime",
+  "version": "1.0.0",
+  "documentation": "https://github.com/Mick-Lab59/traintime",
+  "requirements": ["requests"],
+  "dependencies": [],
+  "codeowners": ["@Mick-Lab59"],
+  "config_flow": true
+}
