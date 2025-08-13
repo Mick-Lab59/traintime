@@ -86,9 +86,10 @@ Pour afficher la carte personnalisée, ajoutez le fichier `traintime-card.js` da
 
 resources:
 
-&nbsp; - url: /local/traintime/traintime-card.js
+&nbsp; - url: /local/traintime/traintime.js
 
 &nbsp;   type: module
+
 
 
 
