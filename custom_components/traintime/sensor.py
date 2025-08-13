@@ -1,15 +1,15 @@
 import requests
 from datetime import datetime
 from homeassistant.components.sensor import SensorEntity
-from .const import DOMAIN, API_URL
+from .const import API_URL
 
 class SncfTrainsSensor(SensorEntity):
     def __init__(self, api_key, station_name, max_trains, active_start, active_end):
-        self._name = f"Trains {station_name}"
+        self.station_name = station_name
+        self._name = f"trains_{station_name.lower().replace(' ', '_')}"
         self._state = None
         self._attributes = {}
         self.api_key = api_key
-        self.station_name = station_name
         self.max_trains = max_trains
         self.active_start = active_start
         self.active_end = active_end
@@ -35,7 +35,6 @@ class SncfTrainsSensor(SensorEntity):
             data = r.json()
             trains = []
 
-            now_hour = datetime.now().hour
             for departure in data.get("departures", []):
                 dep_hour = datetime.fromisoformat(departure["stop_date_time"]["departure_date_time"]).hour
                 if not (self.active_start <= dep_hour <= self.active_end):
@@ -53,3 +52,12 @@ class SncfTrainsSensor(SensorEntity):
         except Exception as e:
             self._state = "Erreur"
             self._attributes = {"error": str(e)}
+
+async def async_setup_entry(hass, entry, async_add_entities):
+    async_add_entities([SncfTrainsSensor(
+        api_key=entry.data["api_key"],
+        station_name=entry.data["station_name"],
+        max_trains=entry.data["max_trains"],
+        active_start=entry.data["active_start"],
+        active_end=entry.data["active_end"]
+    )])
